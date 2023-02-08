@@ -32,6 +32,7 @@ app.get('/', async (request, reply) => {
   const token = request.cookies.token === undefined ? undefined : await verify(request.cookies.token, publicKey) as JwtPayload;
   reply.type('text/html');
   if (token === undefined) {
+    reply.header('Set-Cookie', `signInFailed=0; Max-Age=0; Path=/; Secure; SameSite=Strict`);
     reply.send(html('test', signInForm('/sign-in', request.cookies.signInFailed !== undefined)));
     return;
   }
